@@ -1,0 +1,53 @@
+management:
+  health:
+    circuitbreaker:
+      enabled: true
+    endpoints:
+      web:
+        exposure:
+          include: "*"
+    endpoint:
+      health:
+        show-details: always
+
+
+# Resilience4j Retry configuration
+resilience4j:
+  retry:
+    instances:
+      inventoryRetry:
+        maxAttempts: 3
+        waitDuration: 5s
+        enableExponentialBackoff: true
+        exponentialBackoffMultiplier: 2
+        enableRandomizedWait: true
+        randomizedWaitFactor: 0.5
+  ratelimiter:
+    configs:
+      default:
+        limitRefreshPeriod: 5s
+        limitForPeriod: 1
+        timeoutDuration: 1
+    instances:
+      inventoryRateLimiter:
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true #expose circuit breaker health via the actuator
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 20
+        minimumNumberOfCalls: 10
+        failureRateThreshold: 50
+        slowCallDurationThreshold: 2s
+        slowCallRateThreshold: 80
+        waitDurationInOpenState: 15s
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+    instances:
+      inventoryCircuitBreaker
+
+
+
+
+
+
