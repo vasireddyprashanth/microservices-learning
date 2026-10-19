@@ -1,14 +1,11 @@
 management:
-  health:
-    circuitbreaker:
-      enabled: true
-    endpoints:
-      web:
-        exposure:
-          include: "*"
-    endpoint:
-      health:
-        show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,circuitbreakers
+  endpoint:
+    health:
+      show-details: always
 
 
 # Resilience4j Retry configuration
