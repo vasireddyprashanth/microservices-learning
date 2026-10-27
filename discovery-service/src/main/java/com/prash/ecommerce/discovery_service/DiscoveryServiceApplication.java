@@ -11,5 +11,6 @@ public class DiscoveryServiceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DiscoveryServiceApplication.class, args);
 	}
-
+//testing docker build
+	//test 2
 }

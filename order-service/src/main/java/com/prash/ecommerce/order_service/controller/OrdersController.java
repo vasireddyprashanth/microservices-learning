@@ -1,12 +1,14 @@
 package com.prash.ecommerce.order_service.controller;
 
 import com.prash.ecommerce.order_service.client.InventoryFeignClient;
+import com.prash.ecommerce.order_service.config.PropertiesFile;
 import com.prash.ecommerce.order_service.dto.OrderRequest;
 import com.prash.ecommerce.order_service.service.OrdersService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,18 +18,20 @@ import java.util.List;
 @RequestMapping("/orders")
 @RequiredArgsConstructor
 @Slf4j
+@RefreshScope
 public class OrdersController {
 
-    @Value("${my.variable}")
-    private String myVariable;
+//    @Value("${my.variable}")
+//    private String myVariable;
 
     private final OrdersService orderService;
     private final InventoryFeignClient inventoryFeignClient;
+    private final PropertiesFile propertiesFile;
 
 
     @GetMapping("/helloOrders")
     public String helloOrders() {
-        return "Hello from Orders Service, calling variable:" + myVariable ;
+        return "Hello from Orders Service, calling variable:" + propertiesFile.getVariable() ;
     }
 
 //    @PostMapping("/create-order")

@@ -18,8 +18,8 @@
             public GatewayFilter apply(Config config) {
                 return (exchange,chain)->{
                     log.info("Order filter Pre: {}", exchange.getRequest().getURI());
-                    //return chain.filter(exchange);
-                    return Mono.empty();
+                    return chain.filter(exchange);
+                  //  return Mono.empty();
 
                 };
             }
