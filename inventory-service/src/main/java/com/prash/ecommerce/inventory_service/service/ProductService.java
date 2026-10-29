@@ -34,7 +34,7 @@ public class ProductService {
         return productMapper.toResponse(product);
     }
 
-    @Transactional
+    @Transactional(timeout = 2)
     public Double reduceStocks(OrderRequest request) {
         Double totalPrice= 0.0;
         for(OrderRequestItem item: request.items()){
