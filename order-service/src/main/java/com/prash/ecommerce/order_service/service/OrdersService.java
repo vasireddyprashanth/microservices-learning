@@ -8,6 +8,9 @@ import com.prash.ecommerce.order_service.dto.OrderRequestItem;
 import com.prash.ecommerce.order_service.entity.OrderItem;
 import com.prash.ecommerce.order_service.entity.Orders;
 import com.prash.ecommerce.order_service.repository.OrdersRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -38,11 +41,14 @@ public class OrdersService {
     }
 
     @Transactional
+    //@Retry(name = "inventoryRetry", fallbackMethod = "createOrderFallback")
+    @CircuitBreaker(name = "inventoryCircuitBreaker", fallbackMethod = "createOrderFallback" )
+    @RateLimiter(name = "inventoryRateLimiter", fallbackMethod = "createOrderFallback")
     public OrderRequest createOrder(OrderRequest request) {
+        log.info("Create order service has been called");
         Double totalPrice= inventoryOpenFeignClient.reduceStocks(request);
 
         Orders orders = orderMapper.toEntity(request);
-
 
         for(OrderItem items: orders.getItems()){
             items.setOrder(orders);
@@ -54,6 +60,13 @@ public class OrdersService {
         return orderMapper.toResponse(savedOrders);
 
     }
+
+    public OrderRequest createOrderFallback(OrderRequest request, Throwable throwable){
+        log.info("Fackback has called due to some issues{}", throwable);
+        return new OrderRequest(null,null, null);
+    }
+
+
 
 
 
