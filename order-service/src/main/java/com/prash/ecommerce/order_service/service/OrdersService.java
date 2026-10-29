@@ -41,7 +41,7 @@ public class OrdersService {
     }
 
     @Transactional
-    //@Retry(name = "inventoryRetry", fallbackMethod = "createOrderFallback")
+    @Retry(name = "inventoryRetry", fallbackMethod = "createOrderFallback")
     @CircuitBreaker(name = "inventoryCircuitBreaker", fallbackMethod = "createOrderFallback" )
     @RateLimiter(name = "inventoryRateLimiter", fallbackMethod = "createOrderFallback")
     public OrderRequest createOrder(OrderRequest request) {

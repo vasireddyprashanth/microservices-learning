@@ -51,7 +51,7 @@ public class ProductController {
     }
 
     @PostMapping("reduce-stocks")
-    public ResponseEntity<Double> reduceStocks(@RequestBody OrderRequest request){
+    public ResponseEntity<Double> reduceStocks(@RequestBody OrderRequest request)  {
        Double totalPrice= productService.reduceStocks(request);
        return ResponseEntity.ok(totalPrice);
     }

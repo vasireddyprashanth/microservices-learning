@@ -36,6 +36,7 @@ public class ProductService {
 
     @Transactional(timeout = 2)
     public Double reduceStocks(OrderRequest request) {
+
         Double totalPrice= 0.0;
         for(OrderRequestItem item: request.items()){
             Long productId = item.productId();
