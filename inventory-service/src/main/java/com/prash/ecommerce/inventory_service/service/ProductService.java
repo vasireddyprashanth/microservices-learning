@@ -5,6 +5,7 @@ import com.prash.ecommerce.inventory_service.dto.ProductResponse;
 import com.prash.ecommerce.inventory_service.dto.request.OrderRequest;
 import com.prash.ecommerce.inventory_service.dto.request.OrderRequestItem;
 import com.prash.ecommerce.inventory_service.entity.Product;
+import com.prash.ecommerce.inventory_service.exceptions.InsufficientStockException;
 import com.prash.ecommerce.inventory_service.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +45,7 @@ public class ProductService {
 
             Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("No product found with ID:" + productId));
             if(quantity>product.getStock()){
-                throw new RuntimeException("Order cannot be fullfilled as quantity is less than requested");
+                throw new InsufficientStockException(productId,quantity,product.getStock());
 
             }
 

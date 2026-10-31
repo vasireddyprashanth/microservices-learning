@@ -41,9 +41,9 @@ public class OrdersService {
     }
 
     @Transactional
-    @Retry(name = "inventoryRetry")
+   // @Retry(name = "inventoryRetry")
     @CircuitBreaker(name = "inventoryCircuitBreaker" )
-    @RateLimiter(name = "inventoryRateLimiter")
+   // @RateLimiter(name = "inventoryRateLimiter")
     public OrderRequest createOrder(OrderRequest request) {
         log.info("Create order service has been called");
         Double totalPrice= inventoryOpenFeignClient.reduceStocks(request);
